@@ -20,6 +20,7 @@ class HealthCheckerThread implements Runnable {
     private static final Logger logger = LogManager.getLogger(HealthCheckerThread.class);
 
     private boolean running = false;
+
     /**
      * Delay between checking service status, in milliseconds
      */
@@ -31,8 +32,8 @@ class HealthCheckerThread implements Runnable {
         this.serviceUrl = "http://localhost:12345";
     }
 
-    public HealthCheckerThread(int sleepTime, String serviceUrl) {
-        if(sleepTime < 0){
+    public HealthCheckerThread(String serviceUrl, int sleepTime) {
+        if (sleepTime < 0) {
             throw new IllegalArgumentException("SleepTime should be positive, now " + sleepTime);
         }
         //todo implement serviceUrl validation if needed
@@ -61,7 +62,6 @@ class HealthCheckerThread implements Runnable {
     /**
      * Sends request to serviceUrl and logs the result of this request
      */
-
     private void sendGet() {
 
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
@@ -73,15 +73,15 @@ class HealthCheckerThread implements Runnable {
                 HttpEntity entity = response.getEntity();
                 String result = entity != null ? EntityUtils.toString(entity) : null;
                 if (status >= 200 && status < 300) {
-                    logger.log(Level.INFO, "magnificent is UP");
+                    logger.log(Level.INFO, "Magnificent is UP, status code: " + status);
                 } else {
-                    logger.log(Level.WARN, "magnificent is DOWN");
+                    logger.log(Level.WARN, "Magnificent is DOWN, status code: " + status);
                 }
                 return result;
             };
             httpclient.execute(httpget, responseHandler);
         } catch (IOException e) {
-            logger.log(Level.ERROR, "Can't create connection", e);
+            logger.log(Level.ERROR, "Magnificent is not responding");
         }
     }
 }
