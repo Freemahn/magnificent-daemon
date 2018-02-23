@@ -39,7 +39,6 @@ class HealthCheckerThread implements Runnable {
         //todo implement serviceUrl validation if needed
         this.sleepTime = sleepTime;
         this.serviceUrl = serviceUrl;
-
     }
 
     @Override

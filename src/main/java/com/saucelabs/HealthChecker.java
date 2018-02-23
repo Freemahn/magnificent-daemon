@@ -12,8 +12,8 @@ import org.apache.logging.log4j.Logger;
  * args[1] : delay between checking health, milliseconds
  */
 
-public class Main {
-    private static final Logger logger = LogManager.getLogger(Main.class);
+public class HealthChecker {
+    private static final Logger logger = LogManager.getLogger(HealthChecker.class);
 
     public static void main(String[] args) throws InterruptedException {
         Thread dt;
@@ -23,7 +23,7 @@ public class Main {
             try {
                 sleepTime = Integer.parseInt(args[1]);
             } catch (NumberFormatException e) {
-                logger.log(Level.ERROR, "sleepTime should be integer");
+                logger.log(Level.ERROR, "delay should be integer");
                 System.exit(-1);
             }
             dt = new Thread(new HealthCheckerThread(serviceUrl, sleepTime), "health-checker");
